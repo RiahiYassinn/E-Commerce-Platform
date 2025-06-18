@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Star } from 'lucide-react';
+import { Heart, Star, ShoppingBag } from 'lucide-react';
 import { Product } from '../types';
 
 interface ProductCardProps {
@@ -10,81 +10,98 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProductClick }) => {
   return (
-    <div className="group bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <div className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-translate-y-2 border border-pink-100">
       <div className="relative overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+          className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700 cursor-pointer"
           onClick={() => onProductClick(product)}
         />
-        <button className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-pink-50">
-          <Heart className="h-4 w-4 text-gray-400 hover:text-pink-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        
+        <button className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-pink-50 hover:scale-110 transform translate-y-2 group-hover:translate-y-0">
+          <Heart className="h-5 w-5 text-gray-400 hover:text-pink-500 transition-colors duration-200" />
         </button>
+        
         {product.originalPrice && (
-          <div className="absolute top-3 left-3 bg-pink-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+          <div className="absolute top-4 left-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg animate-pulse">
             Sale
           </div>
         )}
+
+        <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+          <button
+            onClick={() => onAddToCart(product)}
+            className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 px-4 rounded-2xl hover:from-pink-600 hover:to-purple-700 transition-all duration-300 font-medium shadow-lg backdrop-blur-sm flex items-center justify-center space-x-2"
+          >
+            <ShoppingBag className="h-5 w-5" />
+            <span>Quick Add</span>
+          </button>
+        </div>
       </div>
       
-      <div className="p-4">
-        <div className="flex items-center mb-2">
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center">
             <Star className="h-4 w-4 text-yellow-400 fill-current" />
-            <span className="text-sm text-gray-600 ml-1">
+            <span className="text-sm text-gray-600 ml-1 font-medium">
               {product.rating} ({product.reviewCount})
             </span>
+          </div>
+          <div className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+            {product.category}
           </div>
         </div>
         
         <h3 
-          className="text-lg font-semibold text-gray-900 mb-2 cursor-pointer hover:text-pink-600 transition-colors duration-200"
+          className="text-xl font-bold text-gray-900 mb-3 cursor-pointer hover:text-pink-600 transition-colors duration-200 line-clamp-2"
           onClick={() => onProductClick(product)}
         >
           {product.name}
         </h3>
         
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+        <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
           {product.description}
         </p>
         
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               ${product.price}
             </span>
             {product.originalPrice && (
-              <span className="text-sm text-gray-500 line-through">
+              <span className="text-lg text-gray-500 line-through">
                 ${product.originalPrice}
               </span>
             )}
           </div>
           
-          <button
-            onClick={() => onAddToCart(product)}
-            className="px-4 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition-colors duration-200 text-sm font-medium"
-          >
-            Add to Cart
-          </button>
+          {product.originalPrice && (
+            <div className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+              Save ${(product.originalPrice - product.price).toFixed(2)}
+            </div>
+          )}
         </div>
         
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex space-x-1">
-            {product.colors.slice(0, 3).map((color, index) => (
+            {product.colors.slice(0, 4).map((color, index) => (
               <div
                 key={index}
-                className="w-4 h-4 rounded-full border border-gray-200"
+                className="w-6 h-6 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform duration-200 cursor-pointer"
                 style={{ backgroundColor: color.toLowerCase() }}
                 title={color}
               />
             ))}
-            {product.colors.length > 3 && (
-              <span className="text-xs text-gray-500">+{product.colors.length - 3}</span>
+            {product.colors.length > 4 && (
+              <div className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white shadow-md flex items-center justify-center">
+                <span className="text-xs text-gray-600 font-medium">+{product.colors.length - 4}</span>
+              </div>
             )}
           </div>
           
-          <div className="text-xs text-gray-500">
+          <div className="text-sm text-gray-500 bg-purple-50 px-3 py-1 rounded-full font-medium">
             {product.sizes.length} sizes
           </div>
         </div>
